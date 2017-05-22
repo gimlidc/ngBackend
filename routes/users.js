@@ -17,12 +17,19 @@ var userSchema = {
             "description": "A users email - works also as a login",
             "required": true
         },
+        "phoneNumber": {
+            "type": "number",
+            "description": "A czech phone number without country prefix",
+            "required": true,
+            "maximum": 999999999
+        },
         "password": {
             "type": "string",
             "description": "A users password",
             "required": true
         }
-    }
+    },
+    "additionalProperties": false
 };
 
 /* GET users listing. */

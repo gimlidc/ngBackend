@@ -58,7 +58,10 @@ app.use(function(err, req, res, next) {
         } else {
             // If this is an html request then you should probably have
             // some type of Bad Request html template to respond with
-            res.render('badrequestTemplate', responseData);
+            res.render('jsonError', {
+                "title": "JsonSchema validation Error",
+                "error": responseData
+            });
         }
     } else {
         // pass error to next error middleware handler
