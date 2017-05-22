@@ -32,15 +32,40 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    var responseData;
+
+    console.log(err);
+    if (err.name === 'JsonSchemaValidation') {
+        // Log the error however you please
+        console.log(err.message);
+        // logs "express-jsonschema: Invalid data found"
+
+        // Set a bad request http response status or whatever you want
+        res.status(400);
+
+        // Format the response body however you want
+        responseData = {
+            statusText: 'Bad Request',
+            jsonSchemaValidation: true,
+            validations: err.validations  // All of your validation information
+        };
+
+        // Take into account the content type if your app serves various content types
+        if (req.xhr || req.get('Content-Type') === 'application/json') {
+            res.json(responseData);
+        } else {
+            // If this is an html request then you should probably have
+            // some type of Bad Request html template to respond with
+            res.render('badrequestTemplate', responseData);
+        }
+    } else {
+        // pass error to next error middleware handler
+        // render the error page
+        res.status(err.status || 500);
+        res.render('error');
+    }
 });
 
 module.exports = app;
