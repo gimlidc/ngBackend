@@ -17,5 +17,3 @@ Zná v tuto chvíli tři resourcy
 
 #### Example
 `curl -X PUT  http://localhost:3000/users/new -d '{"vokativ":"Honzo","phoneNumber":777111222333,"email":"name@domain","password":"secret"}' -H "Content-Type: application/json"`
-
-`

@@ -34,7 +34,8 @@ var userSchema = {
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
+    res.set({'Access-Control-Allow-Origin': '*'});
+    res.send('[{"name": "Pepa", "surname": "Novák", "birthYear": 1920},{"name": "Franta", "surname": "Liška", "birthYear": 2010}]');
 });
 
 /* PUT new users listing. */
