@@ -36,14 +36,17 @@ var userSchema = {
 router.get('/', function (req, res, next) {
     res.set({'Access-Control-Allow-Origin': '*'});
     res.send([{
+        "id": 1,
         "name": "Pepa",
         "surname": "Novák",
         "birthYear": 1920
     }, {
+        "id": 2,
         "name": "Franta",
         "surname": "Liška",
         "birthYear": 2010
     }, {
+        "id": 3,
         "name": "Pan",
         "surname": "Někdo",
         "birthYear": 1980
