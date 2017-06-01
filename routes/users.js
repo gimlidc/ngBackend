@@ -35,13 +35,29 @@ var userSchema = {
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     res.set({'Access-Control-Allow-Origin': '*'});
-    res.send('[{"name": "Pepa", "surname": "Novák", "birthYear": 1920},{"name": "Franta", "surname": "Liška", "birthYear": 2010}]');
+    res.send([{
+        "name": "Pepa",
+        "surname": "Novák",
+        "birthYear": 1920
+    }, {
+        "name": "Franta",
+        "surname": "Liška",
+        "birthYear": 2010
+    }, {
+        "name": "Pan",
+        "surname": "Někdo",
+        "birthYear": 1980
+    }]);
 });
 
 router.get('/:id/details', function (req, res) {
-    switch(parseInt(req.params.id)) {
+    switch (parseInt(req.params.id)) {
         case 1:
-            res.send({"name": "Pepa", "surname": "Novák", "birthYear": 1920});
+            res.send({
+                "name": "Pepa",
+                "surname": "Novák",
+                "birthYear": 1920
+            });
             break;
         case 2:
             res.send({
@@ -61,7 +77,21 @@ router.get('/:id/details', function (req, res) {
             });
             break;
         case 3:
-            res.send({"name": "Pan", "surname": "Někdo", "birthYear": 1980});
+            res.send({
+                "name": "Pan",
+                "surname": "Někdo",
+                "birthYear": 1980,
+                "address": {
+                    "street": "VŘSR",
+                    "streetNumber": "1711",
+                    "city": "Praha",
+                    "zipCode": "16000",
+                    "country": "Czech Republic"
+                },
+                "email": "pan.nekdo@gmail.com",
+                "phoneNumber": "+420777777111",
+                "personalIdentificationNumber": "801010/1000"
+            });
             break;
         default:
             res.status(404).send({"error": "User not found"});
