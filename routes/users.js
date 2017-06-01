@@ -54,6 +54,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:id/details', function (req, res) {
+    res.set({'Access-Control-Allow-Origin': '*'});
     switch (parseInt(req.params.id)) {
         case 1:
             res.send({
@@ -103,6 +104,7 @@ router.get('/:id/details', function (req, res) {
 
 /* PUT new users listing. */
 router.put('/new', validate({body: userSchema}), function (req, res) {
+    res.set({'Access-Control-Allow-Origin': '*'});
     res.send("user accepted");
 });
 
