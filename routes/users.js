@@ -77,7 +77,8 @@ router.get('/:id/details', function (req, res) {
                 },
                 "email": "franta.liska@gmail.com",
                 "phoneNumber": "+420777189999",
-                "personalIdentificationNumber": "101010/0300"
+                "personalIdentificationNumber": "101010/0300",
+                "type": "admin"
             });
             break;
         case 3:
@@ -99,6 +100,15 @@ router.get('/:id/details', function (req, res) {
             break;
         default:
             res.status(404).send({"error": "User not found"});
+    }
+});
+
+router.get("/:id/adminRoles", function(req, res) {
+    res.set({'Access-Control-Allow-Origin': '*'});
+    if (req.params.id === "2") {
+        res.send({"roles": ["vládce světa", "matka draků", "správce terária"]});
+    } else {
+        res.status(404).send({"error": "User not found"});
     }
 });
 
