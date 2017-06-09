@@ -112,6 +112,13 @@ router.get("/:id/adminRoles", function(req, res) {
     }
 });
 
+router.options("/new", function(req, res) {
+    res.set({'Access-Control-Allow-Origin': '*'});
+    res.set({'Access-Control-Allow-Methods': "PUT",
+    "Access-Control-Allow-Headers": "Content-Type"});
+    res.send("");
+});
+
 /* PUT new users listing. */
 router.put('/new', validate({body: userSchema}), function (req, res) {
     res.set({'Access-Control-Allow-Origin': '*'});
