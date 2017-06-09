@@ -27,6 +27,7 @@ app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+    res.set({'Access-Control-Allow-Origin': '*'});
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -35,6 +36,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
 
     var responseData;
+    res.set({'Access-Control-Allow-Origin': '*'});
 
     console.log(err);
     if (err.name === 'JsonSchemaValidation') {
