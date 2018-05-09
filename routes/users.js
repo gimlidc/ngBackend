@@ -8,6 +8,11 @@ var userSchema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "number",
+            "description": "The user unique id",
+            "required": false
+        },
         "firstname": {
             "type": "string",
             "description": "The first name of the user",
@@ -34,7 +39,7 @@ var userSchema = {
             "description": "A users email - works also as a login",
             "required": false
         },
-        "phoneNumber": {
+        "phonenumber": {
             "type": "number",
             "description": "A czech phone number without country prefix",
             "required": false,
@@ -45,7 +50,7 @@ var userSchema = {
             "description": "A users password",
             "required": false
         },
-        "accountBalance": {
+        "accountbalance": {
             "type": "number",
             "description": "it is all about the money",
             "required": false
@@ -59,6 +64,11 @@ var userSchema = {
                 }
             },
             "required": false
+        },
+        "personalidentificationnumber": {
+            "type": "string",
+            "description": "The real-world identificator",
+            "required": "false"
         }
     },
     "additionalProperties": false
@@ -79,78 +89,16 @@ router.get('/', function (req, res, next) {
             console.log(error);
             res.status(500).send({"error": "Database connection failed."});
         });
-        /**
-        res.send([{
-            "id": 1,
-            "firstname": "Pepa",
-            "lastname": "Novák",
-            "birthdate": "1920-01-27"
-        }, {
-            "id": 2,
-            "firstname": "Franta",
-            "lastname": "Liška",
-            "birthdate": "2010-05-31"
-        }, {
-            "id": 3,
-            "firstname": "Pan",
-            "lastname": "Někdo",
-            "birthdate": "1980-10-21"
-        }]);
-         */
     }
 });
 
 router.get('/:id/details', function (req, res) {
     res.set({'Access-Control-Allow-Origin': '*'});
-    switch (parseInt(req.params.id)) {
-        case 1:
-            res.send({
-                "firstname": "Pepa",
-                "lastname": "Novák",
-                "birthdate": "1920-01-27",
-                "accountBalance": 789409.4783789478
-            });
-            break;
-        case 2:
-            res.send({
-                "firstname": "Franta",
-                "lastname": "Liška",
-                "birthdate": "2010-05-31",
-                "accountBalance": 85.7493747389,
-                "address": {
-                    "street": "Jehovova",
-                    "streetNumber": "1250b",
-                    "city": "Praha",
-                    "zipCode": "11000",
-                    "country": "Czech Republic"
-                },
-                "email": "franta.liska@gmail.com",
-                "phoneNumber": "+420777189999",
-                "personalIdentificationNumber": "101010/0300",
-                "type": "admin"
-            });
-            break;
-        case 3:
-            res.send({
-                "name": "Pan",
-                "surname": "Někdo",
-                "birthYear": 1980,
-                "accountBalance": 78593.894073097232,
-                "address": {
-                    "street": "VŘSR",
-                    "streetNumber": "1711",
-                    "city": "Praha",
-                    "zipCode": "16000",
-                    "country": "Czech Republic"
-                },
-                "email": "pan.nekdo@gmail.com",
-                "phoneNumber": "+420777777111",
-                "personalIdentificationNumber": "801010/1000"
-            });
-            break;
-        default:
-            res.status(404).send({"error": "User not found"});
-    }
+    db.getUser(req.params.id).then(data => {
+        res.send(data);
+    }).catch(error => {
+        res.status(404).send({"error": "User not found"});
+    });
 });
 
 router.get("/:id/adminRoles", function(req, res) {
@@ -163,16 +111,31 @@ router.get("/:id/adminRoles", function(req, res) {
 });
 
 router.options("/new", function(req, res) {
-    res.set({'Access-Control-Allow-Origin': '*'});
-    res.set({'Access-Control-Allow-Methods': "POST, PUT",
-    "Access-Control-Allow-Headers": "Content-Type"});
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods',"PUT");
+    res.header("Access-Control-Allow-Headers","Content-Type");
+    res.send("");
+});
+
+router.options("/:id/update", function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods',"PUT");
+    res.header("Access-Control-Allow-Headers","Content-Type");
     res.send("");
 });
 
 /* PUT new users listing. */
 router.put('/:id/update', validate({body: userSchema}), function (req, res) {
     res.set({'Access-Control-Allow-Origin': '*'});
-    res.send("user accepted");
+    db.getUser(req.params.id).then(() =>
+        db.updateUser(req.params.id, req).then(data => {
+            res.send(data);
+        }).catch(error => {
+            res.status(500).send({"error": error});
+        })
+    ).catch(error => {
+        res.status(404).send({"error": "record not found, use POST instead"})
+    })
 });
 
 /* PUT new users listing. */
